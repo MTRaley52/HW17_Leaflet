@@ -24,10 +24,12 @@ function createFeatures(earthquakeData) {
   // Define a function we want to run once for each feature in the features array
   // Give each feature a popup describing the place and time of the earthquake
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<h3>" + feature.properties.place +
-      "</h3><hr><p>" + new Date(feature.properties.mag) + "</p>");
+    layer.bindPopup("<h3>Location: " + feature.properties.place +
+      "</h3><hr><p>Magnitude: " + (feature.properties.mag) + "</p>");
   }
-  
+
+    // Conditionals for countries points
+
   function color(mag) {
     if (mag < 1) {return "#ffffb2"}
     else if  (mag < 2) {return "#fed976"}
@@ -42,11 +44,11 @@ function createFeatures(earthquakeData) {
   var earthquakes = L.geoJSON(earthquakeData, {
     pointToLayer: function(feature, loc) {
       var geojsonMarkerOptions = {
-        radius: 4 * feature.properties.mag,
+        radius: 4.75 * feature.properties.mag,
         fillColor: color(feature.properties.mag),
         weight: 1,
         opacity: 1,
-        fillOpacity: 0.7
+        fillOpacity: 0.76
       };
       return L.circleMarker(loc, geojsonMarkerOptions);
     },
@@ -80,7 +82,7 @@ function createMap(earthquakes) {
   // Create our map, giving it the streetmap and earthquakes layers to display on load
   var myMap = L.map("map", {
     center: [
-      35.09, -95.71
+      33.38, -97.99
     ],
     zoom: 4,
     layers: [streetmap, earthquakes]
@@ -93,5 +95,15 @@ function createMap(earthquakes) {
     collapsed: false
   }).addTo(myMap);
 
-  //earthquakes.addto(myMap)
+
 }
+
+//Tried adding a legend, but couldn't quite get it to work:
+var legend = L.control({position: 'bottomright'});
+  legend.onAdd = function(quakeLegend) {
+    var div = L.DomUtil.create('div', 'Mag Legend');
+    labels = ['<strong>Mag Legend</strong>'],
+    categories = ['<1','<2','<3','<4','<5','ELSE'];
+  }
+
+  legend.addTo(map);
